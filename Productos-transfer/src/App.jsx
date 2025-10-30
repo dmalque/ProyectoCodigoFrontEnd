@@ -1,7 +1,5 @@
 import AppRouter from "./rutas/AppRouter"
-
-function App() {
-  return <AppRouter />
-}
-
-export default App
+import ReactDOM from "react-dom/client"
+ReactDOM.createRoot(document.getElementById("root")).render(
+<AppRouter />
+)
