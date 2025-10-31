@@ -2,7 +2,6 @@ import { useState } from "react"
 import { supabase } from "../lib/supabaseClient"
 import { useNavigate, Link } from "react-router-dom"
 
-
 export default function Register() {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
@@ -38,8 +37,6 @@ export default function Register() {
       setErrorMsg(validationError)
       return
     }
-
-    // Registro del usuario en Supabase
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
@@ -83,7 +80,6 @@ export default function Register() {
           className="border p-2 w-full rounded mb-3"
           value={formData.telefono}
           onChange={(e) => {
-            // Solo permite números
             const value = e.target.value.replace(/\D/g, "")
             setFormData({ ...formData, telefono: value })
           }}

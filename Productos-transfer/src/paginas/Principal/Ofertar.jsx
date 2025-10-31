@@ -7,8 +7,6 @@ export default function Ofertar({ user }) {
   const [ofertas, setOfertas] = useState([]);
   const [cantidades, setCantidades] = useState({});
   const [tiposOferta, setTiposOferta] = useState({});
-
-  // 🔍 Buscar productos automáticamente al cargar o escribir
   useEffect(() => {
     const fetchProductos = async () => {
       const termino = busqueda.trim();
@@ -41,8 +39,7 @@ export default function Ofertar({ user }) {
     fetchProductos();
   }, [busqueda]);
 
-  // 📦 Cargar ofertas del usuario
-  useEffect(() => {
+   useEffect(() => {
     if (!user) return;
     const cargar = async () => {
       const { data, error } = await supabase
@@ -54,7 +51,7 @@ export default function Ofertar({ user }) {
     cargar();
   }, [user]);
 
-  // 🧮 Manejar cambios en cantidad
+
   const handleCantidadChange = (key, value) => {
     setCantidades((prev) => ({
       ...prev,
@@ -62,7 +59,6 @@ export default function Ofertar({ user }) {
     }));
   };
 
-  // 🔄 Manejar cambios en tipo de oferta
   const handleTipoOfertaChange = (key, value) => {
     setTiposOferta((prev) => ({
       ...prev,
@@ -70,7 +66,7 @@ export default function Ofertar({ user }) {
     }));
   };
 
-  // 🧾 Publicar todas las ofertas con cantidad válida
+
   const publicarOfertas = async () => {
     const seleccionadas = productos.filter((p) => {
       const key = `${p.codpre_det}-${p.codmed}-${p.lote}-${p.regsan}-${p.fecha_venc}`;
@@ -94,7 +90,7 @@ export default function Ofertar({ user }) {
         regsan: p.regsan,
         fecha_venc: p.fecha_venc,
         fecha_publicacion: new Date(),
-        tipo_oferta: tiposOferta[key] || "sobrestock", // ✅ por defecto
+        tipo_oferta: tiposOferta[key] || "sobrestock", 
       };
     });
 
@@ -107,13 +103,13 @@ export default function Ofertar({ user }) {
 
     alert("Ofertas publicadas correctamente.");
 
-    // 🔄 Limpiar campos
+ 
     setCantidades({});
     setTiposOferta({});
     setBusqueda("");
     //setProductos([]);
 
-    // 🧩 Recargar lista actualizada de ofertas
+ 
     const { data: nuevasOfertas, error: errorRecarga } = await supabase
       .from("ofertas")
       .select("*")
@@ -127,7 +123,7 @@ export default function Ofertar({ user }) {
     }
   };
 
-  // ❌ Eliminar oferta
+ 
   const eliminarOferta = async (id) => {
     if (!confirm("¿Desea eliminar esta oferta?")) return;
     const { error } = await supabase.from("ofertas").delete().eq("id", id);
@@ -140,7 +136,7 @@ export default function Ofertar({ user }) {
         Registrar Nueva Oferta
       </h2>
 
-      {/* 🔎 Buscador */}
+      
       <input
         type="text"
         placeholder="Buscar por código o nombre del medicamento..."
@@ -149,7 +145,7 @@ export default function Ofertar({ user }) {
         onChange={(e) => setBusqueda(e.target.value)}
       />
 
-      {/* 📋 Tabla de resultados */}
+    
       <div className="overflow-x-auto max-h-96 border rounded-lg">
         <table className="w-full border-collapse">
           <thead className="bg-blue-100 sticky top-0">
@@ -232,7 +228,7 @@ export default function Ofertar({ user }) {
         </div>
       )}
 
-      {/* 📦 Ofertas registradas */}
+     
       <div className="mt-8">
         <h3 className="text-lg font-semibold text-gray-700 mb-2">
           Mis Ofertas Publicadas
