@@ -99,19 +99,31 @@ export default function Ofertar({ user }) {
     });
 
     const { error } = await supabase.from("ofertas").insert(registros);
+
     if (error) {
       alert("Error al registrar ofertas: " + error.message);
+      return;
+    }
+
+    alert("Ofertas publicadas correctamente.");
+
+    // 🔄 Limpiar campos
+    setCantidades({});
+    setTiposOferta({});
+    setBusqueda("");
+    //setProductos([]);
+
+    // 🧩 Recargar lista actualizada de ofertas
+    const { data: nuevasOfertas, error: errorRecarga } = await supabase
+      .from("ofertas")
+      .select("*")
+      .eq("usuario_id", user.id)
+      .order("fecha_publicacion", { ascending: false });
+
+    if (errorRecarga) {
+      console.error("Error al recargar ofertas:", errorRecarga);
     } else {
-      alert("Ofertas publicadas correctamente.");
-      setCantidades({});
-      setTiposOferta({});
-      setBusqueda("");
-      setProductos([]);
-      const { data } = await supabase
-        .from("ofertas")
-        .select("*")
-        .eq("usuario_id", user.id);
-      setOfertas(data);
+      setOfertas(nuevasOfertas || []);
     }
   };
 
